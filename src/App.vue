@@ -5,6 +5,7 @@ import {
     Menu as IconMenu,
     Operation,
     Tools as Options,
+    Back,
 } from '@element-plus/icons-vue';
 import {
     ElMenu,
@@ -70,6 +71,10 @@ watch(
             <MainMenuItem :isMobile="isMobile" index="/options">
                 <template #icon><el-icon><options /></el-icon></template>
                 <template #title>Options</template>
+            </MainMenuItem>
+            <MainMenuItem :isMobile="isMobile" index="/return">
+                <template #icon><el-icon><back /></el-icon></template>
+                <template #title>Return to Lite</template>
             </MainMenuItem>
         </el-menu>
     </div>
