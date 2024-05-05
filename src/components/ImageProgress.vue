@@ -8,6 +8,7 @@ const { ellipsis } = useEllipsis();
 defineProps<{
     generated?: number;
     total?: number;
+    elapsed?: string;
 }>();
 
 defineEmits(["showGenerated"]);
@@ -26,7 +27,7 @@ defineEmits(["showGenerated"]);
         </el-progress>
         <div class="gen-text">
             <span v-if="generated === total">All done!</span>
-            <span v-else>Generating{{ellipsis}}{{'&nbsp;'.repeat(3 - ellipsis.length)}}</span>
+            <span v-else>Generating{{ellipsis}}{{'&nbsp;'.repeat(3 - ellipsis.length)}}<br><sup>{{ elapsed }}</sup></span>
         </div>
         <div @click="$emit('showGenerated')" v-if="generated" class="view-images">
             <span>View image{{ total === 1 ? "" : "s" }}</span>
@@ -44,6 +45,10 @@ defineEmits(["showGenerated"]);
     font-weight: 500;
     margin-top: 8px;
     gap: 8px;
+}
+
+.gen-text {
+    font-weight: 400;
 }
 
 .view-images:hover {

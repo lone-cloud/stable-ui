@@ -34,6 +34,7 @@ import { breakpointsTailwind, computedAsync, useBreakpoints } from '@vueuse/core
 import handleUrlParams from "@/router/handleUrlParams";
 import InterrogationView from '@/components/InterrogationView.vue';
 import { useOptionsStore } from '@/stores/options';
+import { formatSeconds } from '@/utils/format';
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const isMobile = breakpoints.smallerOrEqual('md');
@@ -72,6 +73,10 @@ function updateCurrentSampler(newSamplers: string[]) {
         store.params.sampler_name = newSamplers[0] as any;
     }
     return newSamplers;
+}
+
+function formatEST(seconds: number) {
+    return "Elapsed: " + formatSeconds(seconds, true, { days: true, hours: true, minutes: true, seconds: true })
 }
 
 function disableBadge() {
@@ -173,9 +178,9 @@ handleUrlParams();
             <div class="main">
                 <el-button @click="() => store.resetStore()" class="reset-btn">Reset</el-button>
                 <el-button
-                    v-if="!store.generating"
                     type="primary"
                     class="generate-cancel-btn"
+                    :style="store.generating ? 'width: 55%;' : ''"
                     @click="() => store.generateImage(store.generatorType)"
                 >
                     <span>
@@ -186,12 +191,13 @@ handleUrlParams();
                     v-if="store.generating"
                     type="danger"
                     class="generate-cancel-btn"
+                    style="width: 25%;"
                     :disabled="store.cancelled"
                     @click="() => {
                         store.cancelled = true;
                         store.generating = false;
                     }"
-                >Cancel</el-button>
+                >Cancel all</el-button>
             </div>
             <div class="image center-horizontal">
                 <el-card
@@ -204,6 +210,7 @@ handleUrlParams();
                     <image-progress 
                         :generated="store.outputs.length"
                         :total="store.queue.length"
+                        :elapsed="formatEST(store.timer.seconds)"
                         @show-generated="uiStore.showGeneratedImages = true"
                         v-if="!uiStore.showGeneratedImages && store.generating"
                     />
