@@ -47,7 +47,7 @@ watch(
         >
             <el-menu-item class="remove-item-styling center-vertical" v-if="!isMobile">
                 <template #title>
-                    <div style="font-size: 20px;">Stable KoboldCpp</div>
+                    <div style="font-size: 20px;">Stable UI</div>
                 </template>
             </el-menu-item>
             <MainMenuItem :isMobile="isMobile" index="/">
