@@ -16,7 +16,7 @@ export const useOptionsStore = defineStore("options", () => {
     const autoCarousel = useLocalStorage<IToggle>("autoCarousel", "Enabled");
     const useBeta = useLocalStorage<IToggle>("useBeta", "Disabled");
     const imageDownloadType = useLocalStorage<"WEBP" | "PNG" | "JPG">("imageDownloadType", "PNG")
-    const baseURL = useLocalStorage("baseURL", "/");
+    const baseURL = useLocalStorage("baseURL", "");
 
     // A janky way to fix using color modes
     options.value.colorMode = useColorMode<BasicColorSchema>({
