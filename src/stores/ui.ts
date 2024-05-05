@@ -1,4 +1,3 @@
-import type { RequestStatusCheck } from "@/types/stable_horde";
 import { db } from "@/utils/db";
 import { ElMessage } from "element-plus";
 import { defineStore } from "pinia";
@@ -9,7 +8,6 @@ import { useOutputStore } from "./outputs";
 export const useUIStore = defineStore("ui", () => {
     const multiSelect = ref(false);
     const selected = ref<number[]>([]);
-    const progress  = ref(0);
     const activeCollapse = ref(["1"]);
     const activeModal = ref(-1);
     const showGeneratorBadge = ref(false);
@@ -61,16 +59,6 @@ export const useUIStore = defineStore("ui", () => {
             return;
         }
         selected.value.push(id);
-    }
-
-    /**
-     * Updates the wait time progress bar
-     */
-    function updateProgress(checkData: RequestStatusCheck, secondsElapsed: number) {
-        const { wait_time } = checkData;
-        const percentage = 100 * (1 - (wait_time as number) / ((wait_time as number) + secondsElapsed));
-        progress.value   = Math.round(percentage * 100) / 100;
-        console.log(`${progress.value.toFixed(2)}%`);
     }
 
     async function openModalToRight() {
@@ -132,7 +120,6 @@ export const useUIStore = defineStore("ui", () => {
         // Variables
         multiSelect,
         selected,
-        progress,
         activeCollapse,
         activeModal,
         showGeneratorBadge,
@@ -142,7 +129,6 @@ export const useUIStore = defineStore("ui", () => {
         raiseWarning,
         toggleMultiSelect,
         toggleSelection,
-        updateProgress,
         openModalToRight,
         openModalToLeft
     };

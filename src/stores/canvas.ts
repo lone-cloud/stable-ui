@@ -270,11 +270,12 @@ export const useCanvasStore = defineStore("canvas", () => {
         const cropY = imageProps.value.imageLayer.getCenter().top - (store.params.height as number / 2);
         const cropHeight = store.params.height;
         const dataUrlOptions = {
-            format: "webp",
+            format: "jpeg",
+            quality: 1.0,
             left: cropX,
             top: cropY,
             width: cropWidth,
-            height: cropHeight
+            height: cropHeight,
         };
         generatorImageProps.value.sourceImage = imageProps.value.imageLayer.toDataURL(dataUrlOptions);
         generatorImageProps.value.maskImage = imageProps.value.redoHistory.length === 0 || drawing.value ? undefined : imageProps.value.drawLayer.toDataURL(dataUrlOptions).split(",")[1];
@@ -318,7 +319,7 @@ export const useCanvasStore = defineStore("canvas", () => {
         const whitePixel = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=';
         fabric.Image.fromURL(whitePixel, image => {
             image.set({ height, width });
-            const imageBase64 = image.toDataURL({ format: "webp" });
+            const imageBase64 = image.toDataURL({ format: "png" });
             generatorImageProps.value.sourceImage = imageBase64;
             drawing.value = true;
             newImage(image);
@@ -394,13 +395,13 @@ export const useCanvasStore = defineStore("canvas", () => {
         saveImages();
         const anchor = document.createElement("a");
         if (drawing.value) {
-            anchor.href = 'data:image/webp;base64,'+generatorImageProps.value.sourceImage?.split(",")[1];
-            anchor.download = "image_drawing.webp";
+            anchor.href = 'data:image/png;base64,'+generatorImageProps.value.sourceImage?.split(",")[1];
+            anchor.download = "image_drawing.png";
             anchor.click();
             return;
         }
-        anchor.href = 'data:image/webp;base64,'+generatorImageProps.value.maskImage;
-        anchor.download = "image_mask.webp";
+        anchor.href = 'data:image/png;base64,'+generatorImageProps.value.maskImage;
+        anchor.download = "image_mask.png";
         anchor.click();
     }
 

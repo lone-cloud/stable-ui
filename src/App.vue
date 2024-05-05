@@ -5,8 +5,6 @@ import {
     Menu as IconMenu,
     Operation,
     Tools as Options,
-    User,
-    HomeFilled
 } from '@element-plus/icons-vue';
 import {
     ElMenu,
@@ -49,13 +47,9 @@ watch(
         >
             <el-menu-item class="remove-item-styling center-vertical" v-if="!isMobile">
                 <template #title>
-                    <div style="font-size: 20px;">Stable Horde</div>
+                    <div style="font-size: 20px;">Stable KoboldCpp</div>
                 </template>
             </el-menu-item>
-            <MainMenuItem :isMobile="isMobile" index="/dashboard">
-                <template #icon><el-icon><home-filled /></el-icon></template>
-                <template #title>Dashboard</template>
-            </MainMenuItem>
             <MainMenuItem :isMobile="isMobile" index="/">
                 <template #icon>
                     <div class="generator-icons">
@@ -68,10 +62,6 @@ watch(
             <MainMenuItem :isMobile="isMobile" index="/images" >
                 <template #icon><el-icon><icon-menu /></el-icon></template>
                 <template #title>Images</template>
-            </MainMenuItem>
-            <MainMenuItem :isMobile="isMobile" index="/workers">
-                <template #icon><el-icon><user /></el-icon></template>
-                <template #title>Workers</template>
             </MainMenuItem>
             <MainMenuItem :isMobile="isMobile" index="/about"  >
                 <template #icon><el-icon><document /></el-icon></template>

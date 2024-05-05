@@ -42,17 +42,11 @@ const handleUrlParams = function() {
         image: "",
         prompt: paramMap.get("prompt") || "",
         sampler_name: paramMap.get("sampler_name") || "k_euler",
-        seed: paramMap.get("seed") || "",
-        modelName: paramMap.get("model_name") || "stable_diffusion",
+        seed: Number(paramMap.get("seed")) || -1,
         steps: Number(paramMap.get("steps") || 30),
         cfg_scale: Number(paramMap.get("cfg_scale") || 7),
         height: Number(paramMap.get("height") || 512),
         width: Number(paramMap.get("width") || 512),
-        clip_skip: Number(paramMap.get("clip_skip") || 1),
-        karras: Boolean(paramMap.get("karras") || true),
-        hires_fix: Boolean(paramMap.get("hires_fix") || false),
-        tiling: Boolean(paramMap.get("tiling") || false),
-        post_processing: paramMap.get("post_processing") ? JSON.parse(paramMap.get("post_processing")) : [],
     }
 
     // Pass to generator view

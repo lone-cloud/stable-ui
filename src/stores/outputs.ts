@@ -13,41 +13,16 @@ import { useLiveQuery } from "@/utils/useLiveQuery";
 
 export interface ImageData {
     id: number;
-    jobId?: string;
     image: string;
-    hordeImageId?: string;
     prompt?: string;
-    sampler_name?:
-        | "k_lms"
-        | "k_heun"
-        | "k_euler"
-        | "k_euler_a"
-        | "k_dpm_2"
-        | "k_dpm_2_a"
-        | "k_dpm_fast"
-        | "k_dpm_adaptive"
-        | "k_dpmpp_2s_a"
-        | "k_dpmpp_2m"
-        | "dpmsolver"
-        | "k_dpmpp_sde"
-        | "DDIM";
-    seed?: string;
+    sampler_name?: string;
+    seed?: number;
     steps?: number;
     cfg_scale?: number;
     height?: number;
     width?: number;
     modelName?: string;
     starred?: 1 | 0;
-    workerName?: string;
-    workerID?: string;
-    post_processing?: string[];
-    karras?: boolean;
-    tiling?: boolean;
-    rated?: 1 | 0;
-    sharedExternally?: boolean;
-    hires_fix?: boolean;
-    clip_skip?: number;
-    control_type?: string;
 }
 
 export const useOutputStore = defineStore("outputs", () => {
