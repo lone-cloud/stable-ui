@@ -22,10 +22,6 @@ function getDefaultStore() {
     }
 }
 
-function sleep(ms: number) {
-    return new Promise(res=>setTimeout(res, ms));
-}
-
 export interface IModelData {
     title?: string;
     model_name?: string;
@@ -84,6 +80,10 @@ export const useGeneratorStore = defineStore("generator", () => {
     const negativePrompt = ref("");
     const negativePromptLibrary = useLocalStorage<string[]>("negativeLibrary", []);
     const params = ref(getDefaultStore());
+    const timer = ref({
+        interval: 0 as number | NodeJS.Timeout,
+        seconds: 0 as number,
+    });
     const multiSelect = ref<IMultiSelect>({
         sampler: {
             name: "Sampler",
@@ -255,18 +255,25 @@ export const useGeneratorStore = defineStore("generator", () => {
 
         // Reset variables
         outputs.value = [];
+        cancelled.value = false;
 
         function getMaxRequests(arr: any[]) {
             return Math.min(arr.length, MAX_PARALLEL_REQUESTS);
         }
 
+        if (timer.value.interval) {
+            clearInterval(timer.value.interval);
+            timer.value.interval = 0;
+            timer.value.seconds = 0;
+        }
+        timer.value.interval = setInterval(() => {
+            timer.value.seconds++;
+        }, 1000);
+
         // Loop until queue is done or generation is cancelled
-        let secondsElapsed = 0;
         while (!queue.value.every(el => el.gathered || el.failed) && !cancelled.value) {
             const availableQueue = queue.value.filter(el => !el.gathered && !el.failed);
-            const t0 = performance.now() / 1000;
             await Promise.all(availableQueue.slice(0, getMaxRequests(availableQueue)).map(async (queuedImage, i) => {
-                await sleep(i * 100);
                 if (cancelled.value) return;
                 queuedImage.gathered = true;
                 fetchNewID(queuedImage.params).then(finalImages => {
@@ -277,9 +284,6 @@ export const useGeneratorStore = defineStore("generator", () => {
                     processImages([{...finalImages, ...queuedImage}]);
                 });
             }))
-            await sleep(500);
-            const t1 = performance.now() / 1000;
-            secondsElapsed += t1 - t0;
         }
 
         if (DEBUG_MODE) console.log("Images queued");
@@ -324,6 +328,15 @@ export const useGeneratorStore = defineStore("generator", () => {
             } as CarouselOutput)),
             ...outputs.value,
         ].sort((a,b) => a.index - b.index);
+
+        if (outputs.value.length === queue.value.length) {
+            queue.value = [];
+            generating.value = false;
+            useUIStore().showGeneratedImages = true;
+            clearInterval(timer.value.interval);
+            timer.value.interval = 0;
+            timer.value.seconds = 0;
+        }
 
         return finalParams;
     }
@@ -538,6 +551,7 @@ export const useGeneratorStore = defineStore("generator", () => {
         cfgList,
         queue,
         promptHistory,
+        timer,
         // Constants
         validGeneratorTypes,
         sourceGeneratorTypes,
