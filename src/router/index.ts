@@ -37,7 +37,7 @@ const router = createRouter({
             path: "/return",
             name: "return",
             redirect: _ => {
-                window.location.href = ".";
+                window.location.href = window.location.pathname.endsWith("/") ? ".." : ".";
                 return "/";
             },
         }
