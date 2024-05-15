@@ -49,7 +49,7 @@ let samplerList = [] as string[];
 const availableSamplers = computedAsync(async () => {
     if (samplerList.length === 0) {
         try {
-            samplerList = (await (await fetch(`${optionsStore.baseURL}/sdapi/v1/samplers`)).json()).map((el: any) => el.name);
+            samplerList = (await (await fetch(`${optionsStore.baseURL.length === 0 ? "." : optionsStore.baseURL}/sdapi/v1/samplers`)).json()).map((el: any) => el.name);
         } catch (e) {
             samplerList = [];
         }

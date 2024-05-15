@@ -27,7 +27,7 @@ export const useInterrogationStore = defineStore("interrogate", () => {
         const { source_image } = currentInterrogation.value;
         if (!source_image) return onError("Failed to get interrogation ID: No image supplied.");
         interrogating.value = true;
-        const response = await fetch(`${optionsStore.baseURL}/sdapi/v1/interrogate`, {
+        const response = await fetch(`${optionsStore.baseURL.length === 0 ? "." : optionsStore.baseURL}/sdapi/v1/interrogate`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',

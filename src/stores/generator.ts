@@ -451,7 +451,7 @@ export const useGeneratorStore = defineStore("generator", () => {
     async function fetchNewID(parameters: any) {
         const optionsStore = useOptionsStore();
         try {
-            const response: Response = await fetch(`${optionsStore.baseURL}/sdapi/v1/${parameters.init_images.length > 0 ? 'img' : 'txt'}2img`, {
+            const response: Response = await fetch(`${optionsStore.baseURL.length === 0 ? "." : optionsStore.baseURL}/sdapi/v1/${parameters.init_images.length > 0 ? 'img' : 'txt'}2img`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
@@ -479,7 +479,7 @@ export const useGeneratorStore = defineStore("generator", () => {
      * */ 
     async function updateAvailableModels() {
         const optionsStore = useOptionsStore();
-        const response = await fetch(`${optionsStore.baseURL}/sdapi/v1/sd-models`);
+        const response = await fetch(`${optionsStore.baseURL.length === 0 ? "." : optionsStore.baseURL}/sdapi/v1/sd-models`);
         const resJSON: any[] = await response.json();
         if (!validateResponse(response, resJSON, 200, "Failed to get available models")) return;
         if (resJSON.length === 0) return "(No model loaded)";
