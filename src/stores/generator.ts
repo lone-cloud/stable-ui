@@ -17,6 +17,7 @@ function getDefaultStore() {
         width: 512,  // make sure these are divisible by 64
         height: 512, // make sure these are divisible by 64
         cfg_scale: 7,
+        clip_skip: 0,
         seed: -1,
         denoising_strength: 0.1,
     }
@@ -62,6 +63,7 @@ interface IMultiSelect {
     sampler: IMultiSelectItem<string>;
     steps: IMultiSelectItem<number>;
     guidance: IMultiSelectItem<number>;
+    clipSkip: IMultiSelectItem<number>;
 }
 
 interface CarouselOutput {
@@ -105,6 +107,13 @@ export const useGeneratorStore = defineStore("generator", () => {
             selected: [7],
             noneMessage: "Failed to generate: No guidance selected.",
             mapToParam: el => el.cfg_scale,
+        },
+        clipSkip: {
+            name: "Clip Skip",
+            enabled: false,
+            selected: [1],
+            noneMessage: "Failed to generate: No CLIP Skip selected.",
+            mapToParam: el => el.clip_skip,
         },
     });
 
@@ -153,8 +162,11 @@ export const useGeneratorStore = defineStore("generator", () => {
     const maxCfgScale = ref(24);
     const minDenoise = ref(0.1);
     const maxDenoise = ref(1);
+    const minClipSkip = ref(0);
+    const maxClipSkip = ref(10);
 
     const arrayRange = (start: number, end: number, step: number) => Array.from({length: (end - start + 1) / step}, (_, i) => (i + start) * step);
+    const clipSkipList = ref(arrayRange(minClipSkip.value, maxClipSkip.value, 1));
     const cfgList =      ref(arrayRange(minCfgScale.value, maxCfgScale.value, 0.5));
 
     const totalImageCount = computed(() => {
@@ -164,12 +176,13 @@ export const useGeneratorStore = defineStore("generator", () => {
         const multiSamplerCount  = multiCalc(promptMatrixCount,    multiSelect.value.sampler);
         const multiStepsCount    = multiCalc(multiSamplerCount,  multiSelect.value.steps);
         const multiGuidanceCount = multiCalc(multiStepsCount,    multiSelect.value.guidance);
+        const multiClipSkipCount = multiCalc(multiGuidanceCount, multiSelect.value.clipSkip);
         return multiGuidanceCount;
     })
 
     /**
      * Resets the generator store to its default state
-     * */ 
+     * */
     function resetStore()  {
         params.value = getDefaultStore();
         inpainting.value = getDefaultImageProps();
@@ -181,7 +194,7 @@ export const useGeneratorStore = defineStore("generator", () => {
 
     /**
      * Generates images on the Horde; returns a list of image(s)
-     * */ 
+     * */
     async function generateImage(type: typeof generatorType["value"]) {
         if (!validGeneratorTypes.includes(type)) return [];
 
@@ -205,10 +218,13 @@ export const useGeneratorStore = defineStore("generator", () => {
         const prompts      = promptMatrix();
         const guidances    = getMultiSelect(multiSelect.value.guidance,    [params.value.cfg_scale]);
         const steps        = getMultiSelect(multiSelect.value.steps,       [params.value.steps]);
+        const clipSkips    = getMultiSelect(multiSelect.value.clipSkip,    [params.value.clip_skip]);
         const samplers     = getMultiSelect(multiSelect.value.sampler,     [params.value.sampler_name]);
+
         const models = [ await updateAvailableModels() ];
         for (const currentGuidance of guidances) {
             for (const currentSteps of steps) {
+                for (const currentClipSkip of clipSkips) {
                 for (const currentPrompt of prompts) {
                     const p = currentPrompt.split(" ### ");
                     for (const currentSampler of (
@@ -233,7 +249,7 @@ export const useGeneratorStore = defineStore("generator", () => {
                             });
                         }
                     }
-                }
+                }}
             }
         }
 
@@ -298,7 +314,7 @@ export const useGeneratorStore = defineStore("generator", () => {
 
     /**
      * Called when a generation is finished.
-     * */ 
+     * */
     async function processImages(finalImages: any[]) {
         const store = useOutputStore();
 
@@ -311,6 +327,7 @@ export const useGeneratorStore = defineStore("generator", () => {
                     id: -1,
                     image: `data:image/png;base64,${img}`,
                     prompt: image.prompt,
+                    clip_skip: image.params.clip_skip,
                     modelName: image.models[0],
                     seed: image.params.seed,
                     steps: image.params.steps,
@@ -326,7 +343,7 @@ export const useGeneratorStore = defineStore("generator", () => {
 
         // The index should the same for each of these outputs
         const index = 0;
-        
+
         outputs.value = [
             ...newOutputs.map(el => ({
                 type: "image",
@@ -366,7 +383,7 @@ export const useGeneratorStore = defineStore("generator", () => {
 
     /**
      * Prepare an image for going through text2img on the Horde
-     * */ 
+     * */
     function generateText2Img(data: ImageData, correctDimensions = true) {
         const defaults = getDefaultStore();
         generatorType.value = "Text2Img";
@@ -388,11 +405,12 @@ export const useGeneratorStore = defineStore("generator", () => {
         if (data.width)           params.value.width = validateParam("width", data.width, maxDimensions.value, defaults.width as number);
         if (data.height)          params.value.height = validateParam("height", data.height, maxDimensions.value, defaults.height as number);
         if (data.seed)            params.value.seed = data.seed;
+        if (data.clip_skip)       params.value.clip_skip = validateParam("clip_skip", data.clip_skip, maxClipSkip.value, defaults.clip_skip as number);
     }
 
     /**
      * Prepare an image for going through img2img on the Horde
-     * */ 
+     * */
     function generateImg2Img(sourceimg: string) {
         const canvasStore = useCanvasStore();
         generatorType.value = "Img2Img";
@@ -405,7 +423,7 @@ export const useGeneratorStore = defineStore("generator", () => {
 
     /**
      * Prepare an image for going through inpainting on the Horde
-     * */ 
+     * */
     function generateInpainting(sourceimg: string) {
         const canvasStore = useCanvasStore();
         outputs.value = [];
@@ -483,7 +501,7 @@ export const useGeneratorStore = defineStore("generator", () => {
 
     /**
      * Updates available models
-     * */ 
+     * */
     async function updateAvailableModels() {
         const optionsStore = useOptionsStore();
         const response = await fetch(`${optionsStore.baseURL.length === 0 ? "." : optionsStore.baseURL}/sdapi/v1/sd-models`);
@@ -555,6 +573,9 @@ export const useGeneratorStore = defineStore("generator", () => {
         maxCfgScale,
         minDenoise,
         maxDenoise,
+        minClipSkip,
+        maxClipSkip,
+        clipSkipList,
         cfgList,
         queue,
         promptHistory,
