@@ -241,6 +241,9 @@ export const useGeneratorStore = defineStore("generator", () => {
                                     prompt: p[0],
                                     negative_prompt: p[1] || "",
                                     init_images: sourceImage ? [ sourceImage.split(",")[1] ] : [],
+                                    mask: maskImage,
+                                    inpainting_mask_invert: (maskImage?1:null),
+                                    inpainting_fill: (maskImage?1:null)
                                 },
                                 source_image: sourceImage?.split(",")[1],
                                 source_mask: maskImage,
