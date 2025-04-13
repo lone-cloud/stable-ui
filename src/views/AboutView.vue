@@ -6,8 +6,8 @@ import BaseLink from '@/components/BaseLink.vue';
   <div class="about">
     <div class="about-content">
         <h1 style="margin-top: 0">Stable UI</h1>
-        <div>This tool was originally a front-end for the AI Horde and has since been converted for local generations with the A1111 API. While Stable UI was originally created as a way to explore web APIs and <BaseLink href="https://vuejs.org/">Vue</BaseLink>, it has since evolved into a tool that allows users to easily access Stable Diffusion to create fascinating images!</div><br>
-        <div>If you want to help improve this tool, you can find the source code from this modified version on https://github.com/ayunami2000/stable-ui and its original AI Horde version on https://github.com/aqualxx/stable-ui. Feel free to contribute! Message the original author on Discord (aqualxx#5004) or through the <BaseLink href="https://discord.com/channels/781145214752129095/1033312325668708393">Stable-UI Suggestions</BaseLink> thread if you have any problems or questions. If you're feeling quite generous, I'd really appreciate it if you were to <BaseLink href="https://ko-fi.com/aqualxx">buy me a coffee</BaseLink>! Generate some images and enjoy using this tool.</div><br>
+        <div>This tool was originally a front-end for the AI Horde and has since been converted for local generations with the A1111 API, such as in KoboldCpp.</div><br>
+        <div>If you want to help improve this tool, you can find the currently maintained source code from this modified version on https://github.com/LostRuins/stable-ui and https://github.com/henk717/stable-ui, which is based off https://github.com/ayunami2000/stable-ui, which derives from the original AI Horde version on https://github.com/aqualxx/stable-ui (Original author aqualxx#5004). Feel free to contribute!</div><br>
         <div>You can find the KoboldAI community and authors of this fork on the <BaseLink href="https://koboldai.org/discord">KoboldAI Discord</BaseLink></div>
     </div>
   </div>

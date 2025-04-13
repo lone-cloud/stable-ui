@@ -254,6 +254,8 @@ handleUrlParams();
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .generated-image > .el-card__body {
@@ -314,6 +316,8 @@ handleUrlParams();
     .generated-image {
         width: 80%;
         height: 100%;
+        padding-top: 0px;
+        padding-bottom: 0px;
     }
 
     .container {
@@ -355,6 +359,8 @@ handleUrlParams();
     .generated-image {
         width: 100%;
         height: 100%;
+        padding-top: 0px;
+        padding-bottom: 0px;
     }
 
     .container {
