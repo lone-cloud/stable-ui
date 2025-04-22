@@ -11,7 +11,7 @@ import { DEBUG_MODE, MAX_PARALLEL_REQUESTS } from "@/constants";
 import { validateResponse } from "@/utils/validate";
 function getDefaultStore() {
     return {
-        steps: 30,
+        steps: 25,
         n: 1,
         sampler_name: "Euler",
         width: 512,  // make sure these are divisible by 64
@@ -19,7 +19,7 @@ function getDefaultStore() {
         cfg_scale: 7,
         clip_skip: 0,
         seed: -1,
-        denoising_strength: 0.1,
+        denoising_strength: 0.6,
     }
 }
 
