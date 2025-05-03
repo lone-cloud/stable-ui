@@ -189,7 +189,13 @@ export const useGeneratorStore = defineStore("generator", () => {
         img2img.value = getDefaultImageProps();
         outputs.value = [];
         useUIStore().showGeneratedImages = false;
+        clearQueue();
         return true;
+    }
+
+    function clearQueue()
+    {
+        queue.value = [];
     }
 
     /**
@@ -596,6 +602,7 @@ export const useGeneratorStore = defineStore("generator", () => {
         generateInpainting,
         getPrompt,
         resetStore,
+        clearQueue,
         pushToNegativeLibrary,
         removeFromNegativeLibrary,
         pushToPromptHistory,
