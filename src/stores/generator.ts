@@ -177,7 +177,7 @@ export const useGeneratorStore = defineStore("generator", () => {
         const multiStepsCount    = multiCalc(multiSamplerCount,  multiSelect.value.steps);
         const multiGuidanceCount = multiCalc(multiStepsCount,    multiSelect.value.guidance);
         const multiClipSkipCount = multiCalc(multiGuidanceCount, multiSelect.value.clipSkip);
-        return multiGuidanceCount;
+        return multiClipSkipCount;
     })
 
     /**
@@ -237,13 +237,20 @@ export const useGeneratorStore = defineStore("generator", () => {
                         samplers
                     )) {
                         for (let i = 0; i < params.value.n; i++) {
+                            let origseed:number = parseInt((params.value.seed).toString());
+                            if(origseed>0)
+                            {
+                                origseed += parseInt(i.toString());
+                            }
                             paramsCached.push({
                                 prompt: currentPrompt,
                                 params: {
                                     ...params.value,
+                                    seed: origseed,
                                     sampler_name: currentSampler,
                                     cfg_scale: currentGuidance,
                                     steps: currentSteps,
+                                    clip_skip: currentClipSkip,
                                     prompt: p[0],
                                     negative_prompt: p[1] || "",
                                     init_images: sourceImage ? [ sourceImage.split(",")[1] ] : [],
