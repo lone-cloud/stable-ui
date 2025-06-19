@@ -16,7 +16,7 @@ function getDefaultStore() {
         sampler_name: "Euler",
         width: 512,  // make sure these are divisible by 64
         height: 512, // make sure these are divisible by 64
-        cfg_scale: 7,
+        cfg_scale: 6,
         clip_skip: 0,
         seed: -1,
         denoising_strength: 0.6,
