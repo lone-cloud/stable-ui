@@ -163,6 +163,16 @@ handleUrlParams();
                         <form-slider label="CLIP Skip(s)"      prop="clipSkips"       v-model="store.multiSelect.clipSkip.selected"    :min="store.minClipSkip"      :max="store.maxClipSkip"   info="Multi-select enabled. Last layers of CLIP to ignore. For most situations this can be left alone." multiple v-if="store.multiSelect.clipSkip.enabled" />
                         <form-slider label="CLIP Skip"         prop="clipSkip"        v-model="store.params.clip_skip"                 :min="store.minClipSkip"      :max="store.maxClipSkip"   info="Last layers of CLIP to ignore. For most situations this can be left alone." v-else />
                         <form-slider label="Init Strength"     prop="denoise"         v-model="store.params.denoising_strength"        :min="store.minDenoise"       :max="store.maxDenoise"    :step="0.01" info="The final image will diverge from the starting image at higher values." v-if="store.sourceGeneratorTypes.includes(store.generatorType)" />
+                        <div>
+                        <span style="height: 100%;font-size: 14px;">PhotoMaker Image: </span>
+                        <input class="el-button"
+                        type="file"
+                        id="photomaker_input"
+                        @change="store.setPhotomakerImage($event)"
+                        accept="image/*"
+                        />
+                        <button @click="store.clearPhotomakerImage()" class="el-button">Clear Image</button>
+                        </div>
                         <h3 style="margin: 16px 0 4px 0">Multi Select</h3>
                         <el-row>
                             <el-col :span="isMobile ? 24 : 12">

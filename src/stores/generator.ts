@@ -242,7 +242,7 @@ export const useGeneratorStore = defineStore("generator", () => {
                             {
                                 origseed += parseInt(i.toString());
                             }
-                            paramsCached.push({
+                            let newgen:any = {
                                 prompt: currentPrompt,
                                 params: {
                                     ...params.value,
@@ -262,7 +262,12 @@ export const useGeneratorStore = defineStore("generator", () => {
                                 source_mask: maskImage,
                                 source_processing: sourceProcessing,
                                 models: models
-                            });
+                            };
+                            if(photomakerBase64Image && photomakerBase64Image!="")
+                            {
+                                newgen["photomaker_image"] = photomakerBase64Image;
+                            }
+                            paramsCached.push(newgen);
                         }
                     }
                 }}
@@ -565,6 +570,33 @@ export const useGeneratorStore = defineStore("generator", () => {
         return false;
     }
 
+    var photomakerBase64Image:string = ""; //i hate vue so im gonna do this in vanilla js
+    function setPhotomakerImage(event:any)
+    {
+        let input = event.target;
+        if (input.files.length > 0) {
+            var selectedFile = input.files[0];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                photomakerBase64Image = e.target?e.target.result as string:"";
+                console.log(photomakerBase64Image);
+            };
+            reader.onerror = function () {
+                console.log("Error reading file.");
+            };
+            reader.readAsDataURL(selectedFile);
+        } else {
+            console.log("No file to load")
+        }
+    };
+    function clearPhotomakerImage() {
+        photomakerBase64Image = "";
+        const inputElement = document.getElementById('photomaker_input') as HTMLInputElement;
+        if (inputElement) {
+            inputElement.value = "";
+        }
+    }
+
     return {
         // Variables
         generatorType,
@@ -614,5 +646,7 @@ export const useGeneratorStore = defineStore("generator", () => {
         removeFromNegativeLibrary,
         pushToPromptHistory,
         removeFromPromptHistory,
+        setPhotomakerImage,
+        clearPhotomakerImage,
     };
 });
