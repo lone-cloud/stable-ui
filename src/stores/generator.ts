@@ -265,7 +265,7 @@ export const useGeneratorStore = defineStore("generator", () => {
                             };
                             if(photomakerBase64Image && photomakerBase64Image!="")
                             {
-                                newgen["photomaker_image"] = photomakerBase64Image;
+                                newgen.params["photomaker_image"] = photomakerBase64Image;
                             }
                             paramsCached.push(newgen);
                         }
@@ -579,6 +579,10 @@ export const useGeneratorStore = defineStore("generator", () => {
             const reader = new FileReader();
             reader.onload = function (e) {
                 photomakerBase64Image = e.target?e.target.result as string:"";
+                if(photomakerBase64Image.includes("data:image"))
+                {
+                    photomakerBase64Image = photomakerBase64Image.split(',')[1];
+                }
                 console.log(photomakerBase64Image);
             };
             reader.onerror = function () {
