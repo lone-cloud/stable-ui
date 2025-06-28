@@ -263,9 +263,9 @@ export const useGeneratorStore = defineStore("generator", () => {
                                 source_processing: sourceProcessing,
                                 models: models
                             };
-                            if(photomakerBase64Image && photomakerBase64Image!="")
+                            if(referenceBase64Image && referenceBase64Image!="")
                             {
-                                newgen.params["photomaker_image"] = photomakerBase64Image;
+                                newgen.params["extra_image"] = referenceBase64Image;
                             }
                             paramsCached.push(newgen);
                         }
@@ -570,20 +570,20 @@ export const useGeneratorStore = defineStore("generator", () => {
         return false;
     }
 
-    var photomakerBase64Image:string = ""; //i hate vue so im gonna do this in vanilla js
-    function setPhotomakerImage(event:any)
+    var referenceBase64Image:string = ""; //i hate vue so im gonna do this in vanilla js
+    function setExtraImage(event:any)
     {
         let input = event.target;
         if (input.files.length > 0) {
             var selectedFile = input.files[0];
             const reader = new FileReader();
             reader.onload = function (e) {
-                photomakerBase64Image = e.target?e.target.result as string:"";
-                if(photomakerBase64Image.includes("data:image"))
+                referenceBase64Image = e.target?e.target.result as string:"";
+                if(referenceBase64Image.includes("data:image"))
                 {
-                    photomakerBase64Image = photomakerBase64Image.split(',')[1];
+                    referenceBase64Image = referenceBase64Image.split(',')[1];
                 }
-                console.log(photomakerBase64Image);
+                console.log(referenceBase64Image);
             };
             reader.onerror = function () {
                 console.log("Error reading file.");
@@ -593,9 +593,9 @@ export const useGeneratorStore = defineStore("generator", () => {
             console.log("No file to load")
         }
     };
-    function clearPhotomakerImage() {
-        photomakerBase64Image = "";
-        const inputElement = document.getElementById('photomaker_input') as HTMLInputElement;
+    function clearExtraImage() {
+        referenceBase64Image = "";
+        const inputElement = document.getElementById('extra_image_input') as HTMLInputElement;
         if (inputElement) {
             inputElement.value = "";
         }
@@ -650,7 +650,7 @@ export const useGeneratorStore = defineStore("generator", () => {
         removeFromNegativeLibrary,
         pushToPromptHistory,
         removeFromPromptHistory,
-        setPhotomakerImage,
-        clearPhotomakerImage,
+        setExtraImage,
+        clearExtraImage,
     };
 });

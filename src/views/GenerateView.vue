@@ -164,14 +164,14 @@ handleUrlParams();
                         <form-slider label="CLIP Skip"         prop="clipSkip"        v-model="store.params.clip_skip"                 :min="store.minClipSkip"      :max="store.maxClipSkip"   info="Last layers of CLIP to ignore. For most situations this can be left alone." v-else />
                         <form-slider label="Init Strength"     prop="denoise"         v-model="store.params.denoising_strength"        :min="store.minDenoise"       :max="store.maxDenoise"    :step="0.01" info="The final image will diverge from the starting image at higher values." v-if="store.sourceGeneratorTypes.includes(store.generatorType)" />
                         <div>
-                        <span style="height: 100%;font-size: 14px;">PhotoMaker Image: </span>
+                        <span style="height: 100%;font-size: 14px;">Reference Image: <br>(Photomaker/Kontext) </span>
                         <input class="el-button"
                         type="file"
-                        id="photomaker_input"
-                        @change="store.setPhotomakerImage($event)"
+                        id="extra_image_input"
+                        @change="store.setExtraImage($event)"
                         accept="image/*"
                         />
-                        <button @click="store.clearPhotomakerImage()" class="el-button">Clear Image</button>
+                        <button @click="store.clearExtraImage()" class="el-button">Clear Image</button>
                         </div>
                         <h3 style="margin: 16px 0 4px 0">Multi Select</h3>
                         <el-row>

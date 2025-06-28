@@ -121,6 +121,6 @@ html.light .menu-container {
     background-color: rgba(163, 166, 173, 0.5);
 }
 
-#photomaker_input::file-selector-button {
+#extra_image_input::file-selector-button {
     visibility: hidden;
 }
