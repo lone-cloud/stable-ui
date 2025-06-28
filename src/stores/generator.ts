@@ -263,9 +263,9 @@ export const useGeneratorStore = defineStore("generator", () => {
                                 source_processing: sourceProcessing,
                                 models: models
                             };
-                            if(referenceBase64Image && referenceBase64Image!="")
+                            if(referenceBase64Images && referenceBase64Images.length>0)
                             {
-                                newgen.params["extra_image"] = referenceBase64Image;
+                                newgen.params["extra_images"] = referenceBase64Images;
                             }
                             paramsCached.push(newgen);
                         }
@@ -570,31 +570,36 @@ export const useGeneratorStore = defineStore("generator", () => {
         return false;
     }
 
-    var referenceBase64Image:string = ""; //i hate vue so im gonna do this in vanilla js
+    var referenceBase64Images: string[] = []; //i hate vue so im gonna do this in vanilla js
     function setExtraImage(event:any)
     {
         let input = event.target;
         if (input.files.length > 0) {
-            var selectedFile = input.files[0];
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                referenceBase64Image = e.target?e.target.result as string:"";
-                if(referenceBase64Image.includes("data:image"))
-                {
-                    referenceBase64Image = referenceBase64Image.split(',')[1];
-                }
-                console.log(referenceBase64Image);
-            };
-            reader.onerror = function () {
-                console.log("Error reading file.");
-            };
-            reader.readAsDataURL(selectedFile);
+            referenceBase64Images = [];
+            for(let i=0;i<input.files.length;++i)
+            {
+                let selectedFile = input.files[i];
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    let refimg = e.target?e.target.result as string:"";
+                    if(refimg.includes("data:image"))
+                    {
+                        refimg = refimg.split(',')[1];
+                    }
+                    console.log(refimg);
+                    referenceBase64Images.push(refimg);
+                };
+                reader.onerror = function () {
+                    console.log("Error reading file.");
+                };
+                reader.readAsDataURL(selectedFile);
+            }
         } else {
             console.log("No file to load")
         }
     };
     function clearExtraImage() {
-        referenceBase64Image = "";
+        referenceBase64Images = [];
         const inputElement = document.getElementById('extra_image_input') as HTMLInputElement;
         if (inputElement) {
             inputElement.value = "";

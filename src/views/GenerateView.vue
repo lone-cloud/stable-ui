@@ -169,7 +169,7 @@ handleUrlParams();
                         type="file"
                         id="extra_image_input"
                         @change="store.setExtraImage($event)"
-                        accept="image/*"
+                        accept="image/*" multiple
                         />
                         <button @click="store.clearExtraImage()" class="el-button">Clear Image</button>
                         </div>
