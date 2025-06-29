@@ -574,8 +574,8 @@ export const useGeneratorStore = defineStore("generator", () => {
     function setExtraImage(event:any)
     {
         let input = event.target;
+        referenceBase64Images = [];
         if (input.files.length > 0) {
-            referenceBase64Images = [];
             for(let i=0;i<input.files.length;++i)
             {
                 let selectedFile = input.files[i];
