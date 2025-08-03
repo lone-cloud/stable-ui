@@ -85,6 +85,7 @@ async function bulkDownload() {
                 <el-form-item label="Base URL">
                     <el-input class="apikey" prop="baseURL" v-model="store.baseURL" />
                 </el-form-item>
+                <form-radio  label="Allow Larger Params" prop="pageless" v-model="store.allowLargerParams" :options="['Enabled', 'Disabled']" />
             </el-tab-pane>
             <el-tab-pane label="📷 Images">
                 <h2>Image Options</h2>
@@ -117,7 +118,7 @@ async function bulkDownload() {
             </el-tab-pane>
         </el-tabs>
     </el-form>
-</template>  
+</template>
 
 <style scoped>
 .anon {
