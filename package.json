@@ -10,12 +10,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path .gitignore"
   },
   "engines": {
-    "node": ">=22.18.0",
-    "pnpm": ">=10.15.1"
-  },
-  "volta": {
-    "node": "22.18.0",
-    "pnpm": "10.15.1"
+    "node": ">=22.18.0"
   },
   "packageManager": "pnpm@10.15.1",
   "dependencies": {
