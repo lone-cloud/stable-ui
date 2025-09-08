@@ -82,8 +82,8 @@ async function bulkDownload() {
         <el-tabs type="border-card" style="min-height: 50vh;">
             <el-tab-pane label="🖨️ Generation">
                 <h2>Generation Options</h2>
-                <el-form-item label="Base URL">
-                    <el-input class="apikey" prop="baseURL" v-model="store.baseURL" />
+                <el-form-item label="Base URL" prop="baseURL">
+                    <el-input class="apikey" v-model="store.baseURL" />
                 </el-form-item>
                 <form-radio  label="Allow Larger Params" prop="pageless" v-model="store.allowLargerParams" :options="['Enabled', 'Disabled']" />
             </el-tab-pane>

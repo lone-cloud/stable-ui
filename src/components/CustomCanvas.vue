@@ -78,7 +78,7 @@ onMounted(() => {
                 <el-color-picker v-model="canvasStore.drawColor" show-alpha v-if="canvasStore.drawing" />
             </div>
             <el-form label-width="110px" style="margin-top: 10px">
-                <form-slider style="margin-bottom: 5px" label="Brush Size" prop="brushSize" v-model="canvasStore.brushSize" :min="10" :max="100" :step="10" :change="canvasStore.setBrush" />
+                <form-slider style="margin-bottom: 5px" label="Brush Size" prop="brushSize" v-model="canvasStore.brushSize" :min="10" :max="100" :step="10" @change="canvasStore.setBrush" />
             </el-form>
         </div>
     </div>

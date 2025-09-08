@@ -12,7 +12,6 @@ const store = useGeneratorStore();
         resize="vertical"
         type="textarea"
         placeholder="Enter prompt here"
-        label-position="top"
         label-style="justify-content: space-between; width: 100%;"
     >
         <template #label>

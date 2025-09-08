@@ -72,7 +72,7 @@ const { ellipsis } = useEllipsis();
             <el-button :icon="Refresh" @click="useInterrogationCaption" :disabled="!captionForm" v-if="captionForm">Text2Img (Caption)</el-button>
         </div>
         <h2 style="margin: 16px 0 8px 0;">Interrogation Results</h2>
-        <el-image :src="store.currentInterrogation.source_image" alt="Uploaded Image" />
+        <el-image :src="store.currentInterrogation.source_image" />
         <div v-if="captionForm">
             <h3>Caption</h3>
             <div v-if="!captionForm">Processing{{ellipsis}}</div>
