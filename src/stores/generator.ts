@@ -20,6 +20,7 @@ function getDefaultStore() {
         clip_skip: 0,
         seed: -1,
         denoising_strength: 0.6,
+        frames: 1,
     }
 }
 
@@ -164,6 +165,8 @@ export const useGeneratorStore = defineStore("generator", () => {
     const maxDenoise = ref(1);
     const minClipSkip = ref(0);
     const maxClipSkip = ref(10);
+    const minFrames = ref(1);
+    const maxFrames = ref(120);
 
     const arrayRange = (start: number, end: number, step: number) => Array.from({length: (end - start + 1) / step}, (_, i) => (i + start) * step);
     const clipSkipList = ref(arrayRange(minClipSkip.value, maxClipSkip.value, 1));
@@ -632,6 +635,8 @@ export const useGeneratorStore = defineStore("generator", () => {
         maxDenoise,
         minClipSkip,
         maxClipSkip,
+        minFrames,
+        maxFrames,
         clipSkipList,
         cfgList,
         queue,
