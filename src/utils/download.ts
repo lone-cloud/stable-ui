@@ -34,6 +34,11 @@ export async function downloadMultipleImages(outputKeys: IndexableType[], showMe
                 name: fileName + ".jpg",
                 input: await convertBase64ToBlob(image, "image/jpeg"),
             })
+        } else if (optionsStore.imageDownloadType === "GIF") {
+            toDownload.push({
+                name: fileName + ".gif",
+                input: await convertBase64ToBlob(image, "image/gif"),
+            })
         } else {
             toDownload.push({
                 name: fileName + ".webp",
@@ -71,6 +76,10 @@ export async function downloadImage(base64Data: string, fileName: string) {
         blob = await convertBase64ToBlob(base64Data, "image/jpeg");
         downloadLink.href = URL.createObjectURL(blob);
         downloadLink.download = fileName.replace(/[/\\:*?"<>]/g, "").substring(0, 128).trimEnd() + ".jpg";
+    } else if (optionsStore.imageDownloadType === "GIF") {
+        blob = await convertBase64ToBlob(base64Data, "image/gif");
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = fileName.replace(/[/\\:*?"<>]/g, "").substring(0, 128).trimEnd() + ".gif";
     } else {
         downloadLink.href = base64Data;
         downloadLink.download = fileName.replace(/[/\\:*?"<>]/g, "").substring(0, 128).trimEnd() + ".webp";

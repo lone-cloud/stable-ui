@@ -15,7 +15,7 @@ export const useOptionsStore = defineStore("options", () => {
     const allowLargerParams = useLocalStorage<IToggle>("allowLargerParams", "Disabled");
     const autoCarousel = useLocalStorage<IToggle>("autoCarousel", "Enabled");
     const useBeta = useLocalStorage<IToggle>("useBeta", "Disabled");
-    const imageDownloadType = useLocalStorage<"WEBP" | "PNG" | "JPG">("imageDownloadType", "PNG")
+    const imageDownloadType = useLocalStorage<"WEBP" | "PNG" | "JPG" | "GIF" >("imageDownloadType", "PNG")
     const baseURL = useLocalStorage("baseURL", "");
 
     // A janky way to fix using color modes

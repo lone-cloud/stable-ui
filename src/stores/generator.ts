@@ -346,10 +346,12 @@ export const useGeneratorStore = defineStore("generator", () => {
         const finalParams: ImageData[] = await Promise.all(
             finalImages.map(async (image) => {
                 const img = image.images[0];
+                const animated = image.animated?true:false;
+                const mime = (animated?'gif':'png');
                 return {
                     // The database automatically increments IDs for us
                     id: -1,
-                    image: `data:image/png;base64,${img}`,
+                    image: `data:image/${mime};base64,${img}`,
                     prompt: image.prompt,
                     clip_skip: image.params.clip_skip,
                     modelName: image.models[0],

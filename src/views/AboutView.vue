@@ -6,7 +6,7 @@ import BaseLink from '@/components/BaseLink.vue';
   <div class="about">
     <div class="about-content">
         <h1 style="margin-top: 0">Stable UI</h1>
-        <div>This tool was originally a front-end for the AI Horde and has since been converted for local generations with the A1111 API, such as in KoboldCpp.</div><br>
+        <div>This tool was originally a front-end for the AI Horde and has since been converted for local generations with the A1111 API, such as in <a href="https://github.com/LostRuins/koboldcpp">KoboldCpp</a>.</div><br>
         <div>If you want to help improve this tool, you can find the currently maintained source code from this modified version on https://github.com/LostRuins/stable-ui and https://github.com/henk717/stable-ui, which is based off https://github.com/ayunami2000/stable-ui, which derives from the original AI Horde version on https://github.com/aqualxx/stable-ui (Original author aqualxx#5004). Feel free to contribute!</div><br>
         <div>You can find the KoboldAI community and authors of this fork on the <BaseLink href="https://koboldai.org/discord">KoboldAI Discord</BaseLink></div>
     </div>
