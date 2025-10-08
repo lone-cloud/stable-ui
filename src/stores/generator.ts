@@ -11,17 +11,21 @@ import { DEBUG_MODE, MAX_PARALLEL_REQUESTS } from "@/constants";
 import { validateResponse } from "@/utils/validate";
 function getDefaultStore() {
     return {
-        steps: 25,
+        steps: 20,
         n: 1,
         sampler_name: "Euler",
         width: 512,  // make sure these are divisible by 64
         height: 512, // make sure these are divisible by 64
         cfg_scale: 6,
         clip_skip: 0,
-        seed: -1,
+        seed: "",
         denoising_strength: 0.6,
         frames: 1,
     }
+}
+
+export function getNewSeed() {
+    return Math.floor(Math.random() * 2 ** 31);
 }
 
 export interface IModelData {
@@ -91,28 +95,28 @@ export const useGeneratorStore = defineStore("generator", () => {
         sampler: {
             name: "Sampler",
             enabled: false,
-            selected: ["Euler"],
+            selected: [params.value.sampler_name],
             noneMessage: "Failed to generate: No sampler selected.",
             mapToParam: el => el.sampler_name,
         },
         steps: {
             name: "Steps",
             enabled: false,
-            selected: [30],
+            selected: [params.value.steps],
             noneMessage: "Failed to generate: No steps selected.",
             mapToParam: el => el.steps,
         },
         guidance: {
             name: "CFG Scale",
             enabled: false,
-            selected: [7],
+            selected: [params.value.cfg_scale],
             noneMessage: "Failed to generate: No guidance selected.",
             mapToParam: el => el.cfg_scale,
         },
         clipSkip: {
             name: "Clip Skip",
             enabled: false,
-            selected: [1],
+            selected: [params.value.clip_skip],
             noneMessage: "Failed to generate: No CLIP Skip selected.",
             mapToParam: el => el.clip_skip,
         },
@@ -158,7 +162,7 @@ export const useGeneratorStore = defineStore("generator", () => {
     const minImages = ref(1);
     const maxImages = ref(20);
     const minSteps = ref(1);
-    const maxSteps = computed(() => useOptionsStore().allowLargerParams === "Enabled" ? 500 : 50);
+    const maxSteps = computed(() => useOptionsStore().allowLargerParams === "Enabled" ? 150 : 50);
     const minCfgScale = ref(1);
     const maxCfgScale = ref(24);
     const minDenoise = ref(0.1);
@@ -239,17 +243,20 @@ export const useGeneratorStore = defineStore("generator", () => {
                     for (const currentSampler of (
                         samplers
                     )) {
+                        let origseed:number = parseInt((params.value.seed).toString());
+                        if (isNaN(origseed) || origseed < 0)
+                        {
+                            origseed = getNewSeed();
+                        }
+                        // mask the seed to prevent overflow on the server
+                        origseed = origseed & 0x7fffffff;
                         for (let i = 0; i < params.value.n; i++) {
-                            let origseed:number = parseInt((params.value.seed).toString());
-                            if(origseed>0)
-                            {
-                                origseed += parseInt(i.toString());
-                            }
+                            const seed = (origseed + i) & 0x7fffffff;
                             let newgen:any = {
                                 prompt: currentPrompt,
                                 params: {
                                     ...params.value,
-                                    seed: origseed,
+                                    seed: seed,
                                     sampler_name: currentSampler,
                                     cfg_scale: currentGuidance,
                                     steps: currentSteps,
