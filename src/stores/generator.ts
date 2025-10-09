@@ -25,7 +25,7 @@ function getDefaultStore() {
 }
 
 export function getNewSeed() {
-    return Math.floor(Math.random() * 2 ** 31);
+    return Math.floor(Math.random() * 9999999) + 1; //keep seeds under 10m for peace of mind, some platforms may use f32 which has a max precision of 16m
 }
 
 export interface IModelData {
@@ -248,10 +248,8 @@ export const useGeneratorStore = defineStore("generator", () => {
                         {
                             origseed = getNewSeed();
                         }
-                        // mask the seed to prevent overflow on the server
-                        origseed = origseed & 0x7fffffff;
                         for (let i = 0; i < params.value.n; i++) {
-                            const seed = (origseed + i) & 0x7fffffff;
+                            const seed = (origseed + parseInt(i.toString()));
                             let newgen:any = {
                                 prompt: currentPrompt,
                                 params: {
