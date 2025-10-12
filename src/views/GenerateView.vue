@@ -141,7 +141,6 @@ handleUrlParams();
                             type="textarea"
                             placeholder="Enter negative prompt here"
                             info="What to exclude from the image. Not working? Try increasing the guidance."
-                            label-position="top"
                         >
                         </form-input>
                         <form-input label="Seed" prop="seed" v-model="store.params.seed" placeholder="Enter seed here">
@@ -156,8 +155,8 @@ handleUrlParams();
                         <form-slider label="Batch Size"            prop="batchSize"       v-model="store.params.n"                         :min="store.minImages"        :max="store.maxImages" />
                         <form-slider label="Steps(s)"              prop="multiSteps"      v-model="store.multiSelect.steps.selected"       :min="store.minSteps"         :max="store.maxSteps"      info="Multi-select enabled. Keep step count between 30 to 50 for optimal generation times. Coherence typically peaks between 60 and 90 steps, with a trade-off in speed." multiple v-if="store.multiSelect.steps.enabled" />
                         <form-slider label="Steps"                 prop="steps"           v-model="store.params.steps"                     :min="store.minSteps"         :max="store.maxSteps"      info="Keep step count between 30 to 50 for optimal generation times. Coherence typically peaks between 60 and 90 steps, with a trade-off in speed." v-else />
-                        <form-slider label="Width"                 prop="width"           v-model="store.params.width"                     :min="store.minDimensions"    :max="store.maxDimensions" :step="64"   :change="onDimensionsChange" />
-                        <form-slider label="Height"                prop="height"          v-model="store.params.height"                    :min="store.minDimensions"    :max="store.maxDimensions" :step="64"   :change="onDimensionsChange" />
+                        <form-slider label="Width"                 prop="width"           v-model="store.params.width"                     :min="store.minDimensions"    :max="store.maxDimensions" :step="64"   @change="onDimensionsChange" />
+                        <form-slider label="Height"                prop="height"          v-model="store.params.height"                    :min="store.minDimensions"    :max="store.maxDimensions" :step="64"   @change="onDimensionsChange" />
                         <form-slider label="Guidance(s)"           prop="cfgScales"       v-model="store.multiSelect.guidance.selected"    :min="store.minCfgScale"      :max="store.maxCfgScale"   info="Multi-select enabled. Higher values will make the AI respect your prompt more. Lower values allow the AI to be more creative." multiple v-if="store.multiSelect.guidance.enabled" />
                         <form-slider label="Guidance"              prop="cfgScale"        v-model="store.params.cfg_scale"                 :min="store.minCfgScale"      :max="store.maxCfgScale"   :step="0.5"  info="Higher values will make the AI respect your prompt more. Lower values allow the AI to be more creative." v-else />
                         <form-slider label="CLIP Skip(s)"          prop="clipSkips"       v-model="store.multiSelect.clipSkip.selected"    :min="store.minClipSkip"      :max="store.maxClipSkip"   info="Multi-select enabled. Last layers of CLIP to ignore. For most situations this can be left alone." multiple v-if="store.multiSelect.clipSkip.enabled" />

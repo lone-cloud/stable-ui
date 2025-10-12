@@ -34,7 +34,7 @@ function onChanged(value: any) {
                 <slot name="label">{{label}}</slot>
             </FormLabel>
         </template>
-        <el-select :model-value="modelValue" :filterable="filterable" :multiple="multiple" :placement="placement" @change="onChanged" placeholder="Select">
+        <el-select :model-value="modelValue" :filterable="filterable" :multiple="multiple" :placement="placement as any" @change="onChanged" placeholder="Select">
             <el-option
                 v-for="item in options"
                 :key="item"
