@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { RouterView, useRoute } from "vue-router";
 import {
-    Document,
     Menu as IconMenu,
     Operation,
     Tools as Options,
-    Back,
 } from '@element-plus/icons-vue';
 import {
     ElMenu,
@@ -64,17 +62,9 @@ watch(
                 <template #icon><el-icon><icon-menu /></el-icon></template>
                 <template #title>Images</template>
             </MainMenuItem>
-            <MainMenuItem :isMobile="isMobile" index="/about"  >
-                <template #icon><el-icon><document /></el-icon></template>
-                <template #title>About</template>
-            </MainMenuItem>
             <MainMenuItem :isMobile="isMobile" index="/options">
                 <template #icon><el-icon><options /></el-icon></template>
                 <template #title>Options</template>
-            </MainMenuItem>
-            <MainMenuItem :isMobile="isMobile" index="/return">
-                <template #icon><el-icon><back /></el-icon></template>
-                <template #title>Return to Lite</template>
             </MainMenuItem>
         </el-menu>
     </div>
