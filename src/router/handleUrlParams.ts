@@ -43,11 +43,13 @@ const handleUrlParams = function() {
         prompt: paramMap.get("prompt") || "",
         sampler_name: paramMap.get("sampler_name") || "k_euler",
         seed: Number(paramMap.get("seed")) || -1,
-        steps: Number(paramMap.get("steps") || 30),
-        cfg_scale: Number(paramMap.get("cfg_scale") || 7),
+        steps: Number(paramMap.get("steps") || 20),
+        cfg_scale: Number(paramMap.get("cfg_scale") || 5),
         height: Number(paramMap.get("height") || 512),
         width: Number(paramMap.get("width") || 512),
         clip_skip: Number(paramMap.get("clip_skip") || 0),
+        frames: Number(paramMap.get("frames") || 1),
+        scheduler: paramMap.get("scheduler") || "default",
     }
 
     // Pass to generator view

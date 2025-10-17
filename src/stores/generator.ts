@@ -16,11 +16,12 @@ function getDefaultStore() {
         sampler_name: "Euler",
         width: 512,  // make sure these are divisible by 64
         height: 512, // make sure these are divisible by 64
-        cfg_scale: 6,
+        cfg_scale: 5,
         clip_skip: 0,
         seed: -1,
         denoising_strength: 0.6,
         frames: 1,
+        scheduler: "default",
     }
 }
 
@@ -271,6 +272,19 @@ export const useGeneratorStore = defineStore("generator", () => {
                                 source_processing: sourceProcessing,
                                 models: models
                             };
+                            //don't send any default or unwanted params
+                            if(newgen.params["sampler_name"]=="default")
+                            {
+                                delete newgen.params["sampler_name"];
+                            }
+                            if(newgen.params["scheduler"]=="default")
+                            {
+                                delete newgen.params["scheduler"];
+                            }
+                            if(newgen.params["frames"] && newgen.params["frames"]<=1)
+                            {
+                                delete newgen.params["frames"];
+                            }
                             if(referenceBase64Images && referenceBase64Images.length>0)
                             {
                                 newgen.params["extra_images"] = referenceBase64Images;
@@ -366,6 +380,8 @@ export const useGeneratorStore = defineStore("generator", () => {
                     cfg_scale: image.params.cfg_scale,
                     width: image.params.width,
                     height: image.params.height,
+                    frames: image.params.frames,
+                    scheduler: image.params.scheduler,
                 }
             })
         )
@@ -437,6 +453,8 @@ export const useGeneratorStore = defineStore("generator", () => {
         if (data.height)          params.value.height = validateParam("height", data.height, maxDimensions.value, defaults.height as number);
         if (data.seed)            params.value.seed = data.seed;
         if (data.clip_skip)       params.value.clip_skip = validateParam("clip_skip", data.clip_skip, maxClipSkip.value, defaults.clip_skip as number);
+        if (data.scheduler)  params.value.scheduler = data.scheduler;
+        if (data.frames)          params.value.frames = validateParam("frames", data.frames, maxFrames.value, defaults.frames as number);
     }
 
     /**

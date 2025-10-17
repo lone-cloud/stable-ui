@@ -54,13 +54,18 @@ function handleClose() {
         align-center
     >
         <div class="main-output-container" ref="target">
-            <!-- Loads the image instantly -->
-            <div class="main-output" :style="{
-                backgroundImage: `url(${currentOutput.image || ''})`,
-                backgroundSize: 'contain',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'center center',
-            }"></div>
+            <!-- Replace background-image div with an actual <img> for saveability -->
+            <div
+                class="main-output"
+                style="position: relative; display: flex; align-items: center; justify-content: center;"
+            >
+                <img
+                    v-if="currentOutput?.image"
+                    :src="currentOutput.image"
+                    alt="Output image"
+                    style="max-width: 100%; max-height: 100%; object-fit: contain;"
+                />
+            </div>
         </div>
         <div style="font-size: 18px; font-weight: 500;">{{currentOutput.prompt?.split("###")[0] || 'Unkown Creation'}}</div>
         <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; letter-spacing: 0.025em;">

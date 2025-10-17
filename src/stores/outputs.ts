@@ -24,6 +24,8 @@ export interface ImageData {
     modelName?: string;
     starred?: 1 | 0;
     clip_skip?: number;
+    frames?: number;
+    scheduler?: string;
 }
 
 export const useOutputStore = defineStore("outputs", () => {
@@ -92,7 +94,7 @@ export const useOutputStore = defineStore("outputs", () => {
 
     /**
      * Appends outputs
-     * */ 
+     * */
     async function pushOutputs(newOutputs: ImageData[]) {
         // The database auto increments the ID for us
         const newOutputsWithoutID = newOutputs.map(el => {
@@ -111,7 +113,7 @@ export const useOutputStore = defineStore("outputs", () => {
      */
     async function importFromZip(uploadFile: UploadFile) {
         const uiStore = useUIStore();
-    
+
         if (!uploadFile.raw) return;
         if (!uploadFile.raw.type.includes("zip")) {
             uiStore.raiseError("Uploaded file needs to be a ZIP!", false);
@@ -166,7 +168,7 @@ export const useOutputStore = defineStore("outputs", () => {
 
     /**
      * Toggles whether or not an output corresponding to an ID is starred
-     * */ 
+     * */
     async function toggleStarred(id: number) {
         const output = await db.outputs.get(id);
         return db.outputs.update(id, {
@@ -176,14 +178,14 @@ export const useOutputStore = defineStore("outputs", () => {
 
     /**
      * Deletes an output corresponding to an ID
-     * */ 
+     * */
     function deleteOutput(id: number) {
         return db.outputs.delete(id);
     }
 
     /**
      * Deletes multiples outputs corresponding to their IDs
-     * */ 
+     * */
     async function deleteMultipleOutputs(ids: number[]) {
         const uiStore = useUIStore();
         uiStore.selected = [];
