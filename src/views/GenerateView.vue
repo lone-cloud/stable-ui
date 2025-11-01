@@ -59,6 +59,8 @@ const availableSamplers = computedAsync(async () => {
     return updateCurrentSampler(samplerList);
 })
 
+const availableSchedulers = ["default", "discrete", "karras", "exponential", "ays", "gits", "sgm_uniform", "simple", "smoothstep"];
+
 const rules = reactive<FormRules>({
     prompt: [{
         required: true,
@@ -163,6 +165,7 @@ handleUrlParams();
                         <form-slider label="CLIP Skip"             prop="clipSkip"        v-model="store.params.clip_skip"                 :min="store.minClipSkip"      :max="store.maxClipSkip"   info="Last layers of CLIP to ignore. For most situations this can be left alone." v-else />
                         <form-slider label="Init Strength"         prop="denoise"         v-model="store.params.denoising_strength"        :min="store.minDenoise"       :max="store.maxDenoise"    :step="0.01" info="The final image will diverge from the starting image at higher values." v-if="store.sourceGeneratorTypes.includes(store.generatorType)" />
                         <form-slider label="Video Frames"          prop="frames"          v-model="store.params.frames"                    :min="store.minFrames"        :max="store.maxFrames"     info="Number of consecutive video frames to generate (Video models only). Max 80 frames, about 5 seconds of video."/>
+                        <form-select label="Scheduler"             prop="scheduler"       v-model="store.params.scheduler"            :options="availableSchedulers" info="Experimental! KoboldCpp only, allows you to use a different scheduler. Leave as default otherwise."/>
                         <div>
                         <span style="height: 100%;font-size: 14px;">Reference Image: <br>(Photomaker/Kontext) </span>
                         <input class="el-button"
