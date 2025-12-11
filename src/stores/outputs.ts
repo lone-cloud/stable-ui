@@ -131,7 +131,7 @@ export const useOutputStore = defineStore("outputs", () => {
             const splitName = name.split(".");
             const fileType = splitName.slice(-1).join(".");
             const fileName = splitName.slice(0, -1).join(".");
-            if (fileType === "webp") {
+            if (fileType === "webp" || fileType === "png" || fileType === "gif" || fileType === "jpg" || fileType === "jpeg") {
                 // Async to speed up
                 pushing.push(
                     new Promise(resolve => {
