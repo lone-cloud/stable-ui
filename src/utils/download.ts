@@ -58,7 +58,7 @@ export async function downloadMultipleImages(outputKeys: IndexableType[], showMe
 
     const downloadLink = document.createElement("a");
     downloadLink.href = URL.createObjectURL(zipFile);
-    downloadLink.download = "stable_horde.zip";
+    downloadLink.download = "sdui_images.zip";
     downloadLink.click();
 }
 
