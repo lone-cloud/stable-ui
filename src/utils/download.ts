@@ -24,17 +24,23 @@ export async function downloadMultipleImages(outputKeys: IndexableType[], showMe
         // Make a valid file name, and only get first 128 characters so we don't break the max file name limit
         const fileName = `${i}-${output.seed}-${output.prompt}`.replace(/[/\\:*?"<>]/g, "").substring(0, 128).trimEnd();
 
-        if (optionsStore.imageDownloadType === "PNG") {
+        let savtype = optionsStore.imageDownloadType;
+        if(output.frames && output.frames > 1)
+        {
+            savtype = "GIF"; //force gif if frames > 1
+        }
+
+        if (savtype === "PNG") {
             toDownload.push({
                 name: fileName + ".png",
                 input: await convertBase64ToBlob(image, "image/png"),
             })
-        } else if (optionsStore.imageDownloadType === "JPG") {
+        } else if (savtype === "JPG") {
             toDownload.push({
                 name: fileName + ".jpg",
                 input: await convertBase64ToBlob(image, "image/jpeg"),
             })
-        } else if (optionsStore.imageDownloadType === "GIF") {
+        } else if (savtype === "GIF") {
             toDownload.push({
                 name: fileName + ".gif",
                 input: await convertBase64ToBlob(image, "image/gif"),

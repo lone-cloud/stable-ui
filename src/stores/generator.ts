@@ -298,6 +298,11 @@ export const useGeneratorStore = defineStore("generator", () => {
 
         if (DEBUG_MODE) console.log("Using generation parameters:", paramsCached)
 
+        let do_reset = false;
+        if(!generating.value)
+        {
+            do_reset = true;
+        }
         generating.value = true;
         uiStore.showGeneratedImages = false;
 
@@ -313,7 +318,10 @@ export const useGeneratorStore = defineStore("generator", () => {
         }
 
         // Reset variables
-        outputs.value = [];
+        if(do_reset)
+        {
+            outputs.value = [];
+        }
         cancelled.value = false;
 
         function getMaxRequests(arr: any[]) {
