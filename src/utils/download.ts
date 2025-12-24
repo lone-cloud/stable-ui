@@ -25,9 +25,9 @@ export async function downloadMultipleImages(outputKeys: IndexableType[], showMe
         const fileName = `${i}-${output.seed}-${output.prompt}`.replace(/[/\\:*?"<>]/g, "").substring(0, 128).trimEnd();
 
         let savtype = optionsStore.imageDownloadType;
-        if(output.frames && output.frames > 1)
+        if(image.startsWith("data:image/gif"))
         {
-            savtype = "GIF"; //force gif if frames > 1
+            savtype = "GIF"; // always save gifs as gif
         }
 
         if (savtype === "PNG") {
@@ -74,15 +74,21 @@ export async function downloadImage(base64Data: string, fileName: string) {
     const downloadLink = document.createElement("a");
 
     let blob: Blob | undefined;
-    if (optionsStore.imageDownloadType === "PNG") {
+    let savtype = optionsStore.imageDownloadType;
+    if(base64Data.startsWith("data:image/gif"))
+    {
+        savtype = "GIF"; // always save gifs as gif
+    }
+
+    if (savtype === "PNG") {
         blob = await convertBase64ToBlob(base64Data, "image/png");
         downloadLink.href = URL.createObjectURL(blob);
         downloadLink.download = fileName.replace(/[/\\:*?"<>]/g, "").substring(0, 128).trimEnd() + ".png"; // Only get first 128 characters so we don't break the max file name limit
-    } else if (optionsStore.imageDownloadType === "JPG") {
+    } else if (savtype === "JPG") {
         blob = await convertBase64ToBlob(base64Data, "image/jpeg");
         downloadLink.href = URL.createObjectURL(blob);
         downloadLink.download = fileName.replace(/[/\\:*?"<>]/g, "").substring(0, 128).trimEnd() + ".jpg";
-    } else if (optionsStore.imageDownloadType === "GIF") {
+    } else if (savtype === "GIF") {
         blob = await convertBase64ToBlob(base64Data, "image/gif");
         downloadLink.href = URL.createObjectURL(blob);
         downloadLink.download = fileName.replace(/[/\\:*?"<>]/g, "").substring(0, 128).trimEnd() + ".gif";
