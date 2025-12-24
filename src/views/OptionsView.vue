@@ -86,6 +86,7 @@ async function bulkDownload() {
                     <el-input class="apikey" prop="baseURL" v-model="store.baseURL" />
                 </el-form-item>
                 <form-radio  label="Allow Larger Params" prop="pageless" v-model="store.allowLargerParams" :options="['Enabled', 'Disabled']" />
+                <form-radio  label="Video Gen: Request AVI download" prop="pageless" v-model="store.alsoRequestAvi" :options="['Enabled', 'Disabled']" />
             </el-tab-pane>
             <el-tab-pane label="📷 Images">
                 <h2>Image Options</h2>

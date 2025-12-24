@@ -13,6 +13,7 @@ export const useOptionsStore = defineStore("options", () => {
     const pageSize = useLocalStorage("pageSize", 25);
     const pageless = useLocalStorage<IToggle>("pageless", "Disabled");
     const allowLargerParams = useLocalStorage<IToggle>("allowLargerParams", "Disabled");
+    const alsoRequestAvi = useLocalStorage<IToggle>("alsoRequestAvi", "Disabled");
     const autoCarousel = useLocalStorage<IToggle>("autoCarousel", "Enabled");
     const useBeta = useLocalStorage<IToggle>("useBeta", "Disabled");
     const imageDownloadType = useLocalStorage<"WEBP" | "PNG" | "JPG" | "GIF" >("imageDownloadType", "PNG")
@@ -30,6 +31,7 @@ export const useOptionsStore = defineStore("options", () => {
         pageSize,
         pageless,
         allowLargerParams,
+        alsoRequestAvi,
         autoCarousel,
         useBeta,
         imageDownloadType,

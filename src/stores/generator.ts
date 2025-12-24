@@ -289,6 +289,10 @@ export const useGeneratorStore = defineStore("generator", () => {
                             {
                                 newgen.params["extra_images"] = referenceBase64Images;
                             }
+                            if(useOptionsStore().alsoRequestAvi === "Enabled" && newgen.params["frames"] && newgen.params["frames"]>1)
+                            {
+                                newgen.params["video_output_type"] = 2; //request avi to download as well
+                            }
                             paramsCached.push(newgen);
                         }
                     }
@@ -375,6 +379,7 @@ export const useGeneratorStore = defineStore("generator", () => {
                 const img = image.images[0];
                 const animated = image.animated?true:false;
                 const mime = (animated?'gif':'png');
+                const extra_avi = (image.extra_data?(`data:video/avi;base64,${image.extra_data}`):"");
                 return {
                     // The database automatically increments IDs for us
                     id: -1,
@@ -390,6 +395,7 @@ export const useGeneratorStore = defineStore("generator", () => {
                     height: image.params.height,
                     frames: image.params.frames,
                     scheduler: image.params.scheduler,
+                    extra_avi: extra_avi,
                 }
             })
         )

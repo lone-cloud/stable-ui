@@ -43,6 +43,34 @@ watch(
 function handleClose() {
     modalOpen.value = false;
 }
+
+function downloadAvi() {
+    if (!currentOutput.value?.extra_avi) return;
+
+    // extra_avi format: data:video/avi;base64,AAAA...
+    const base64 = currentOutput.value.extra_avi.split(',')[1];
+    if (!base64) return;
+
+    const binary = atob(base64);
+    const len = binary.length;
+    const bytes = new Uint8Array(len);
+
+    for (let i = 0; i < len; i++) {
+        bytes[i] = binary.charCodeAt(i);
+    }
+
+    const blob = new Blob([bytes], { type: 'video/avi' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `output-${currentOutput.value.id ?? 'video'}.avi`;
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
 </script>
 
 <template>
@@ -67,7 +95,7 @@ function handleClose() {
                 />
             </div>
         </div>
-        <div style="font-size: 18px; font-weight: 500;">{{currentOutput.prompt?.split("###")[0] || 'Unkown Creation'}}</div>
+        <div style="font-size: 18px; font-weight: 500;">{{currentOutput.prompt?.split("###")[0] || 'Unknown Creation'}}</div>
         <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; letter-spacing: 0.025em;">
             <div>Negative Prompt: {{currentOutput.prompt?.split("###")[1] || "None"}}</div>
             <span>Model: {{currentOutput.modelName || "Unknown"}} - </span>
@@ -77,6 +105,8 @@ function handleClose() {
             <span>CFG Scale: {{currentOutput.cfg_scale || "Unknown"}} - </span>
             <span>Clip Skip: {{currentOutput.clip_skip || "Unknown"}} - </span>
             <span>Dimensions: {{currentOutput.width || "???"}}x{{currentOutput.height || "???"}} - </span>
+            <span>Frames: {{currentOutput.frames || "1"}}</span>
+            <span v-if="currentOutput.extra_avi"> - <a href="#" @click.prevent="downloadAvi" style="cursor: pointer; color: var(--el-color-primary);">[Download AVI]</a></span>
         </div>
         <div>
             <ImageActions :image-data="currentOutput" />
