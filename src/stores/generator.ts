@@ -302,35 +302,39 @@ export const useGeneratorStore = defineStore("generator", () => {
 
         if (DEBUG_MODE) console.log("Using generation parameters:", paramsCached)
 
-        let do_reset = false;
+        let is_new_generation = false;
         if(!generating.value)
         {
-            do_reset = true;
+            is_new_generation = true;
+            outputs.value = [];
         }
         generating.value = true;
         uiStore.showGeneratedImages = false;
 
         // Push each item in the parameters array to the queue
+        const pendingQueue = queue.value.filter(el => !el.gathered && !el.failed); //number of incomplete reqs
+        let reqLimCounter = pendingQueue.length;
         for (let i = 0; i < paramsCached.length; i++) {
-            queue.value.push({
-                ...paramsCached[i],
-                jobId: "",
-                index: i,
-                gathered: false,
-                failed: false,
-            })
+            if(reqLimCounter < MAX_PARALLEL_REQUESTS)
+            {
+                queue.value.push({
+                    ...paramsCached[i],
+                    jobId: "",
+                    index: i,
+                    gathered: false,
+                    failed: false,
+                });
+                ++reqLimCounter;
+            }
+        }
+
+        if(!is_new_generation)
+        {
+            return;
         }
 
         // Reset variables
-        if(do_reset)
-        {
-            outputs.value = [];
-        }
         cancelled.value = false;
-
-        function getMaxRequests(arr: any[]) {
-            return Math.min(arr.length, MAX_PARALLEL_REQUESTS);
-        }
 
         if (timer.value.interval) {
             clearInterval(timer.value.interval);
@@ -343,24 +347,21 @@ export const useGeneratorStore = defineStore("generator", () => {
 
         // Loop until queue is done or generation is cancelled
         while (!queue.value.every(el => el.gathered || el.failed) && !cancelled.value) {
-            const availableQueue = queue.value.filter(el => !el.gathered && !el.failed);
-            const maxRequests = getMaxRequests(availableQueue);
-
-            for (const [i, queuedImage] of availableQueue.slice(0, maxRequests).entries()) {
-                if (cancelled.value) break;
-                queuedImage.gathered = true;
-                try {
-                    const finalImages = await fetchNewID(queuedImage.params);
-                    if (!finalImages) {
-                        queuedImage.failed = true;
-                        continue;
-                    }
-                    processImages([{...finalImages, ...queuedImage}]);
-                } catch (error) {
-                    queuedImage.failed = true;
-                    // Optionally handle the error here
-                    console.error('Error fetching image:', error);
+            const next = queue.value.find(
+                q => !q.gathered && !q.failed
+            );
+            if (!next) break;
+            next.gathered = true;
+            try {
+                const res = await fetchNewID(next.params);
+                if (!res) {
+                    next.failed = true;
+                    continue;
                 }
+                processImages([{ ...res, ...next }]);
+            } catch (error) {
+                next.failed = true;
+                console.error('Error fetching image:', error);
             }
         }
 
