@@ -205,6 +205,10 @@ export const useGeneratorStore = defineStore("generator", () => {
     {
         queue.value = [];
     }
+    function clearOutputs()
+    {
+        outputs.value = [];
+    }
 
     /**
      * Generates images on the Horde; returns a list of image(s)
@@ -696,6 +700,7 @@ export const useGeneratorStore = defineStore("generator", () => {
         getPrompt,
         resetStore,
         clearQueue,
+        clearOutputs,
         pushToNegativeLibrary,
         removeFromNegativeLibrary,
         pushToPromptHistory,
