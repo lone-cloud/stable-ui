@@ -109,7 +109,9 @@ function downloadAvi() {
             <span v-if="currentOutput.extra_avi"> - <a href="#" @click.prevent="downloadAvi" style="cursor: pointer; color: var(--el-color-primary);">[Download AVI]</a></span>
         </div>
         <template #footer>
-            <ImageActions :image-data="currentOutput" />
+            <ImageActions 
+                :image-data="currentOutput"
+                :on-delete="handleClose" />
         </template>
     </el-dialog>
 </template>
