@@ -108,9 +108,9 @@ function downloadAvi() {
             <span>Frames: {{currentOutput.frames || "1"}}</span>
             <span v-if="currentOutput.extra_avi"> - <a href="#" @click.prevent="downloadAvi" style="cursor: pointer; color: var(--el-color-primary);">[Download AVI]</a></span>
         </div>
-        <div>
+        <template #footer>
             <ImageActions :image-data="currentOutput" />
-        </div>
+        </template>
     </el-dialog>
 </template>
 
@@ -149,6 +149,14 @@ function downloadAvi() {
     overflow-y: scroll;
     padding-top: 0;
     height: 100%;
+}
+
+.image-viewer > .el-dialog__footer {
+    border-top: 1px solid var(--el-border-color);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 8px;
 }
 
 @media only screen and (max-width: 1280px) {
