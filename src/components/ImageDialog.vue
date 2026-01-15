@@ -136,7 +136,7 @@ function downloadAvi() {
 }
 
 .image-viewer > .el-dialog__header {
-    padding: 26px;
+    padding: 12px 26px;
 }
 
 .image-viewer > .el-dialog__body {
