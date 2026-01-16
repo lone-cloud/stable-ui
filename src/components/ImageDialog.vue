@@ -103,7 +103,7 @@ function downloadAvi() {
             <span>Seed: {{currentOutput.seed || "Unknown"}} - </span>
             <span>Steps: {{currentOutput.steps || "Unknown"}} - </span>
             <span>CFG Scale: {{currentOutput.cfg_scale || "Unknown"}} - </span>
-            <span>Clip Skip: {{currentOutput.clip_skip || "Unknown"}} - </span>
+            <span>Clip Skip: {{currentOutput.clip_skip ?? "Unknown"}} - </span>
             <span>Dimensions: {{currentOutput.width || "???"}}x{{currentOutput.height || "???"}} - </span>
             <span>Frames: {{currentOutput.frames || "1"}}</span>
             <span v-if="currentOutput.extra_avi"> - <a href="#" @click.prevent="downloadAvi" style="cursor: pointer; color: var(--el-color-primary);">[Download AVI]</a></span>
