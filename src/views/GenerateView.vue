@@ -17,6 +17,7 @@ import {
     Comment,
     PictureFilled,
     MagicStick,
+    CloseBold,
 } from '@element-plus/icons-vue';
 import BrushFilled from '../components/icons/BrushFilled.vue';
 import ImageSearch from '../components/icons/ImageSearch.vue';
@@ -59,7 +60,19 @@ const availableSamplers = computedAsync(async () => {
     return updateCurrentSampler(samplerList);
 })
 
-const availableSchedulers = ["default", "discrete", "karras", "exponential", "ays", "gits", "sgm_uniform", "simple", "smoothstep"];
+let schedulerList = [] as string[];
+
+const availableSchedulers = computedAsync(async () => {
+    if (schedulerList.length === 0) {
+        try {
+            schedulerList = (await (await fetch(`${optionsStore.baseURL.length === 0 ? "." : optionsStore.baseURL}/sdapi/v1/schedulers`)).json()).map((el: any) => el.name);
+        } catch (e) {
+            schedulerList = [];
+        }
+    }
+    if (schedulerList.length === 0) return [];
+    return updateCurrentScheduler(schedulerList);
+})
 
 const rules = reactive<FormRules>({
     prompt: [{
@@ -76,6 +89,15 @@ function updateCurrentSampler(newSamplers: string[]) {
         store.params.sampler_name = newSamplers[0] as any;
     }
     return newSamplers;
+}
+
+function updateCurrentScheduler(newSchedulers: string[]) {
+    if (!store.params) return newSchedulers;
+    if (!store.params.scheduler) return newSchedulers;
+    if (newSchedulers.indexOf(store.params.scheduler) === -1) {
+        store.params.scheduler = newSchedulers[0] as any;
+    }
+    return newSchedulers;
 }
 
 function formatEST(seconds: number) {
@@ -145,7 +167,7 @@ handleUrlParams();
                             info="What to exclude from the image. Not working? Try increasing the guidance."
                         >
                         </form-input>
-                        <form-input label="Seed" prop="seed" v-model="store.params.seed" placeholder="Enter seed here">
+                        <form-input label="Seed" prop="seed" v-model="store.params.seed" placeholder="Enter seed here" clearable :clear-icon="CloseBold">
                             <template #append>
                                 <el-tooltip content="Randomize!" placement="top">
                                     <el-button :icon="MagicStick" @click="() => store.params.seed = getNewSeed()" />
