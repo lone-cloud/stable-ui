@@ -21,6 +21,7 @@ function getDefaultStore() {
         seed: -1,
         denoising_strength: 0.6,
         frames: 1,
+        enable_hr: false,
         scheduler: "default",
     }
 }
@@ -401,6 +402,7 @@ export const useGeneratorStore = defineStore("generator", () => {
                     frames: image.params.frames,
                     scheduler: image.params.scheduler,
                     extra_avi: extra_avi,
+                    enable_hr: image.params.enable_hr,
                 }
             })
         )
@@ -472,7 +474,7 @@ export const useGeneratorStore = defineStore("generator", () => {
         if (data.height)          params.value.height = validateParam("height", data.height, maxDimensions.value, defaults.height as number);
         if (data.seed)            params.value.seed = data.seed;
         if (data.clip_skip)       params.value.clip_skip = validateParam("clip_skip", data.clip_skip, maxClipSkip.value, defaults.clip_skip as number);
-        if (data.scheduler)  params.value.scheduler = data.scheduler;
+        if (data.scheduler)       params.value.scheduler = data.scheduler;
         if (data.frames)          params.value.frames = validateParam("frames", data.frames, maxFrames.value, defaults.frames as number);
     }
 
