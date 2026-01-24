@@ -27,6 +27,7 @@ const outputStore = useOutputStore();
 const props = defineProps<{
     imageData: ImageData;
     onDelete?: Function;
+    showDismiss?: boolean;
 }>();
 
 const confirmDelete = () => {
@@ -102,5 +103,5 @@ async function copyLink(imageData: ImageData) {
     <el-button @click="store.generateText2Img(imageData)" type="success" size="small" plain>Txt2img</el-button>
     <el-button @click="store.generateImg2Img(imageData.image)" type="success" size="small" plain>Img2img</el-button>
     <el-button @click="store.generateInpainting(imageData.image)" type="success" size="small" plain>Inpaint</el-button>
-    <el-button @click="dismissImage()" type="success" size="small" plain>Dismiss</el-button>
+    <el-button v-if="showDismiss" @click="dismissImage()" type="success" size="small" plain>Dismiss</el-button>
     <el-button @click="copyLink(imageData)" type="success" :icon="Link" size="small" plain>Share</el-button></template>

@@ -56,6 +56,7 @@ function onDelete(id: number) {
                         <ImageActions
                             :imageData="store.outputs[index].output"
                             :on-delete="onDelete"
+                            :show-dismiss="true"
                         />
                     </div>
                 </el-scrollbar>
