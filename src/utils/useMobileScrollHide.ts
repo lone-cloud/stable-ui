@@ -1,19 +1,38 @@
 import { ref, computed, watch } from 'vue'
 import { useScroll, useWindowSize } from '@vueuse/core'
 
-export function useMobileScrollHide(threshold = 5) {
+export function useMobileScrollHide({
+  mobileWidth = 768,
+  hideAfterDistanceFromTop = 100,
+  hideAfterScroll = 100,
+} = {}) {
   const { width } = useWindowSize()
-  const isMobile = computed(() => width.value <= 768)
+  const isMobile = computed(() => width.value <= mobileWidth)
   const isVisible = ref(true)
 
-  const { y, directions } = useScroll(window)
+  const { y } = useScroll(window)
 
-  watch(y, () => {
+  let lastScrollY = y.value
+  let scrollDistance = 0
+
+  watch(y, (newY) => {
     if (!isMobile.value) return
 
-    if (directions.bottom && y.value > threshold) {
-      isVisible.value = false
-    } else if (directions.top) {
+    const scrollDeltaY = newY - lastScrollY
+    lastScrollY = newY
+
+    if (scrollDeltaY > 0 && newY > hideAfterDistanceFromTop) {
+      scrollDistance += scrollDeltaY
+
+      if (scrollDistance >= hideAfterScroll) {
+        isVisible.value = false
+        scrollDistance = 0
+      }
+      return
+    }
+
+    if (scrollDeltaY < 0) {
+      scrollDistance = 0
       isVisible.value = true
     }
   })
