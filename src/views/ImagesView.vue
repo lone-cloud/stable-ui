@@ -24,9 +24,11 @@ import { onKeyStroke } from '@vueuse/core';
 import { downloadMultipleImages } from '@/utils/download';
 import { db } from '@/utils/db';
 import { useWindowSize } from '@vueuse/core'
+import { useMobileScrollHide } from '@/utils/useMobileScrollHide'
 import LayoutOutlined from '@/components/icons/LayoutOutlined.vue';
 
 const { width } = useWindowSize();
+const { isVisible: showTopBar, isMobile } = useMobileScrollHide();
 
 const store = useOutputStore();
 const optionStore = useOptionsStore();
@@ -102,7 +104,7 @@ const splitList = computed(() => {
 </script>
 
 <template>
-    <div class="images-top-bar">
+    <div class="images-top-bar" :class="{ 'mobile-hidden': isMobile && !showTopBar }">
         <div class="options">
             <el-popover
                 placement="bottom"
@@ -261,6 +263,18 @@ const splitList = computed(() => {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 12px;
+    gap: 8px;
+    position: sticky;
+    top: 60px;
+    z-index: 99;
+    padding: 8px;
+    background-color: color-mix(in srgb, var(--el-bg-color-overlay) 60%, transparent);
+    border-bottom: 1px solid var(--el-border-color);
+    transition: transform 0.3s ease-in-out;
+}
+
+.images-top-bar.mobile-hidden {
+    transform: translateY(-100%);
 }
 
 .images-top-bar > * {
@@ -278,6 +292,7 @@ const splitList = computed(() => {
 
 @media only screen and (max-width: 768px) {
     .images-top-bar {
+        top: 0;
         flex-wrap: wrap;
     }
 

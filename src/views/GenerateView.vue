@@ -197,6 +197,11 @@ handleUrlParams();
                         accept="image/*" multiple
                         />
                         <button @click="store.clearExtraImage()" class="el-button">Clear Image</button>
+                        <el-row>
+                            <el-col :span="isMobile ? 24 : 12">
+                                <form-switch label="ESRGAN Upscale"    prop="enable_hr"   v-model="store.params.enable_hr"    info="Enable upscale with ESRGAN." />
+                            </el-col>
+                        </el-row>
                         </div>
                         <h3 style="margin: 16px 0 4px 0">Multi Select</h3>
                         <el-row>

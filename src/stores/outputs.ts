@@ -27,6 +27,7 @@ export interface ImageData {
     frames?: number;
     scheduler?: string;
     extra_avi?: string;
+    enable_hr?: 1 | 0;
 }
 
 export const useOutputStore = defineStore("outputs", () => {
